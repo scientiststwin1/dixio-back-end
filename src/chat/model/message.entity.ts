@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 
 @Entity('message')
@@ -21,4 +22,7 @@ export class MessageEntity {
   @ManyToOne(() => UserEntity, (user) => user.id, { eager: true })
   @JoinColumn()
   user: UserEntity;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  created_at: Date;
 }
