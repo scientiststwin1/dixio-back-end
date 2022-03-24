@@ -3,6 +3,7 @@ import { instanceToPlain } from 'class-transformer';
 import { UserEntity } from 'src/user/model/user.entity';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { WsResponse } from 'src/utility/helper';
+import { MessageEntity } from './model/message.entity';
 import { MessageRepository } from './repository/message.repository';
 
 @Injectable()
@@ -27,6 +28,7 @@ export class ChatService {
       const result = { user: newUser, messages: instanceToPlain(messages) };
 
       return new WsResponse(true, 200, result);
+
     } catch (error) {
       if (error.code === '23505')
         return new WsResponse(
@@ -45,5 +47,20 @@ export class ChatService {
           'Unexpected error happend',
         );
     }
+  }
+
+  async saveMessage(
+    user: UserEntity,
+    messageContent: string,
+  ): Promise<WsResponse> {
+    const newMessage = new MessageEntity();
+    newMessage.sender_id = user.id;
+    newMessage.message_content = messageContent;
+
+    await this.messageRepository.insert(newMessage);
+
+    const result = { ...instanceToPlain(newMessage), user };
+
+    return new WsResponse(true, 300, result);
   }
 }

@@ -31,5 +31,13 @@ export class ChatGateway implements OnGatewayConnection{
   }
 
   @SubscribeMessage('send-message')
-  sendMessage(client: Socket, payload: any): void {}
+  async sendMessage(client: Socket, payload: any): Promise<void> {
+
+    const user = client['user'];
+    const { message } = payload;
+
+    const result = await this.chatService.saveMessage(user, message);
+
+    client.emit('send-message', result);
+  }
 }
