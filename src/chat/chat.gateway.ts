@@ -16,7 +16,7 @@ export class ChatGateway implements OnGatewayConnection{
   @WebSocketServer() wss: Server;
 
   async handleConnection(client: Socket, ...args: any[]) {
-    client.emit('connect');
+    client.emit('connect-to-server');
   }
 
   @SubscribeMessage('register')
@@ -38,6 +38,6 @@ export class ChatGateway implements OnGatewayConnection{
 
     const result = await this.chatService.saveMessage(user, message);
 
-    client.emit('send-message', result);
+    this.wss.emit('send-message', result);
   }
 }

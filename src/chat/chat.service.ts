@@ -22,7 +22,7 @@ export class ChatService {
 
       const messages = await this.messageRepository.find({
         select: ['id', 'message_content', 'user'],
-        order: { created_at: 'ASC' },
+        order: { created_at: 'DESC' },
       });
 
       const result = { user: newUser, messages: instanceToPlain(messages) };
