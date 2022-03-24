@@ -10,4 +10,8 @@ module.exports = {
   database: process.env.DATABASE_NAME,
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: false,
+  migrations: ['dist/utility/migrations/*.js'],
+  cli: {
+    migrationsDir: 'src/utility/migrations',
+  },
 };
