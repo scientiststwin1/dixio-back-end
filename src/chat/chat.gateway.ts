@@ -16,7 +16,7 @@ export class ChatGateway implements OnGatewayConnection{
   @WebSocketServer() wss: Server;
 
   async handleConnection(client: Socket, ...args: any[]) {
-    console.log(client.id);
+    client.emit('connect');
   }
 
   @SubscribeMessage('register')
