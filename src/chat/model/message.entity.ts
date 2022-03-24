@@ -20,7 +20,7 @@ export class MessageEntity {
   message_content: string;
 
   @ManyToOne(() => UserEntity, (user) => user.id, { eager: true })
-  @JoinColumn()
+  @JoinColumn({ name: 'sender_id' })
   user: UserEntity;
 
   @CreateDateColumn({ type: 'timestamp' })

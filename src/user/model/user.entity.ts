@@ -1,7 +1,7 @@
 import { MessageEntity } from 'src/chat/model/message.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-@Entity('user')
+@Entity('users')
 export class UserEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
