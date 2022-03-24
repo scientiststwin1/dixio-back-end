@@ -9,8 +9,7 @@ import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 
 @WebSocketGateway(8000, { namespace: 'chat' })
-export class ChatGateway implements OnGatewayConnection{
-
+export class ChatGateway implements OnGatewayConnection {
   constructor(private chatService: ChatService) {}
 
   @WebSocketServer() wss: Server;
@@ -32,12 +31,12 @@ export class ChatGateway implements OnGatewayConnection{
 
   @SubscribeMessage('send-message')
   async sendMessage(client: Socket, payload: any): Promise<void> {
-
     const user = client['user'];
     const { message } = payload;
 
     const result = await this.chatService.saveMessage(user, message);
 
-    this.wss.emit('send-message', result);
+    if (result.success) this.wss.emit('send-message', result);
+    else client.emit('send-message', result);
   }
 }

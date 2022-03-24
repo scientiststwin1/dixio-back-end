@@ -28,7 +28,6 @@ export class ChatService {
       const result = { user: newUser, messages: instanceToPlain(messages) };
 
       return new WsResponse(true, 200, result);
-
     } catch (error) {
       if (error.code === '23505')
         return new WsResponse(
@@ -53,14 +52,18 @@ export class ChatService {
     user: UserEntity,
     messageContent: string,
   ): Promise<WsResponse> {
-    const newMessage = new MessageEntity();
-    newMessage.sender_id = user.id;
-    newMessage.message_content = messageContent;
+    try {
+      const newMessage = new MessageEntity();
+      newMessage.sender_id = user.id;
+      newMessage.message_content = messageContent;
 
-    await this.messageRepository.insert(newMessage);
+      await this.messageRepository.insert(newMessage);
 
-    const result = { ...instanceToPlain(newMessage), user };
+      const result = { ...instanceToPlain(newMessage), user };
 
-    return new WsResponse(true, 300, result);
+      return new WsResponse(true, 300, result);
+    } catch (error) {
+      return new WsResponse(false, 400, null, null, 'Unexpected error happend');
+    }
   }
 }
